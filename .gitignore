@@ -1,0 +1,35 @@
+# Compiled object files
+*.o
+*.a
+*.so
+
+# Executables
+programa
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+
+# Debug and Release directories (if applicable)
+debug/
+release/
+
+# IDE specific files (for example, Visual Studio Code, Eclipse, etc.)
+.vscode/
+.idea/
+
+# Backup files
+*~
+*.bak
+
+# Log files
+*.log
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
