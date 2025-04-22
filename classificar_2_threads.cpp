@@ -1,4 +1,3 @@
-// classificar_2_threads.cpp
 #include <thread>
 #include <vector>
 #include <algorithm>

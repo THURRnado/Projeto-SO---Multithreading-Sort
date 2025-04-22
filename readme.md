@@ -5,7 +5,7 @@ Este projeto implementa um algoritmo de ordenação utilizando múltiplas thread
 
 ## Funções de Classificação
 
-O código possui três implementações de funções que utilizam **multithreading** para ordenar um vetor de números. A diferença entre elas é a quantidade de threads usadas durante o processo de ordenação.
+O código possui três implementações de funções que utilizam **multithreading** para ordenar um vetor de números. A diferença entre elas é a quantidade de threads usadas durante o processo de ordenação. A ordenação é feita usando a função de sort padrão do C++.
 
 ### 1. `classificar_2_threads`
 
@@ -27,16 +27,75 @@ Nesta função, **10 threads classificadoras** são usadas para dividir o vetor 
 
 **Objetivo**: Aumentar a paralelização do processo de classificação utilizando 10 threads para ordenar diferentes partes do vetor.
 
-### 3. `classificar_10_5_intermediarias`
+### 3. `classificar_50_threads`
 
-Esta função é mais avançada e utiliza **10 threads classificadoras**, **5 threads intermediárias** para combinar as partes ordenadas e **1 thread de mesclagem final** para juntar o vetor completo.
+Esta função utiliza **50 threads classificadoras** para dividir o vetor em 50 partes iguais. Cada parte é ordenada por uma thread individual. Após a classificação, uma estratégia de mesclagem eficiente é aplicada para juntar todas as partes em um único vetor ordenado final.
 
 #### Passo a Passo:
-- **10 Threads Classificadoras**: O vetor é dividido em 10 partes, e cada parte é classificada por uma thread.
-- **5 Threads Intermediárias**: Essas threads pegam duas partes ordenadas e as combinam, criando subconjuntos ordenados.
-- **1 Thread de Mesclagem Final**: Após as threads intermediárias, uma última thread de mesclagem junta as partes restantes para formar o vetor final ordenado.
+- **50 Threads Classificadoras**: O vetor é dividido em 50 partes. Cada thread ordena uma dessas partes.
+- **Mesclagem em Etapas**: As partes ordenadas são combinadas progressivamente em etapas, utilizando uma abordagem semelhante à de uma árvore binária (merge sort paralelo), para evitar sobrecarga em uma única thread.
 
-**Objetivo**: Utilizar um número maior de threads intermediárias para combinar as partes ordenadas de forma mais eficiente.
+**Objetivo**: Aproveitar ao máximo o poder de paralelização do sistema em vetores grandes (ex: 100.000+ elementos), minimizando o tempo de ordenação mesmo em casos com muitos dados.
+
+**Observação**: Essa abordagem é mais eficaz em sistemas com muitos núcleos de CPU e para vetores com muitos elementos. Em vetores pequenos, o uso de muitas threads pode causar sobrecarga (overhead) e reduzir o desempenho.
+
+---
+
+## Testes e conclusões
+
+### Com o arquivo de 100 numeros desordenados
+
+```bash
+Escolha o arquivo a ser lido:
+1. Pequeno (100 elementos)
+2. Medio (1000 elementos)
+3. Grande (10000 elementos)
+Escolha (1/2/3): 1
+Tamanho lido: 100
+Tempo de ordenacao com 2 threads classificadoras: 0.0007148 segundos
+
+Tempo de ordenacao com 10 threads classificadoras: 0.0014115 segundos
+
+Tempo de ordenacao com 50 threads classificadoras: 0.0090408 segundos
+```
+
+É possível notar que o algorítmo com 2 threads classificadoras obteve um desempenho melhor por se tratar de uma quantidade pequena de dados a serem ordenados e o algorítmo de 50 threads obteve um péssimo desempenho em relação aos outros dois.
+
+### Com o arquivo de 1000 numeros desordenados
+
+```bash
+Escolha o arquivo a ser lido:
+1. Pequeno (100 elementos)
+2. Medio (1000 elementos)
+3. Grande (10000 elementos)
+Escolha (1/2/3): 2
+Tamanho lido: 1000
+Tempo de ordenacao com 2 threads classificadoras: 0.0005631 segundos
+
+Tempo de ordenacao com 10 threads classificadoras: 0.0011848 segundos
+
+Tempo de ordenacao com 50 threads classificadoras: 0.0106029 segundos
+```
+
+É possível notar que o algorítmo com 2 threads classificadoras continuou obtendo um desempenho melhor e o algorítmo de 50 threads obteve um péssimo novamente desempenho em relação aos outros dois. Em contrapartida, o algorítmo de 10 threads melhorou um pouco seu desempenho por se tratar de mais dados.
+
+### Com o arquivo de 10000 numeros desordenados
+
+```bash
+Escolha o arquivo a ser lido:
+1. Pequeno (100 elementos)
+2. Medio (1000 elementos)
+3. Grande (10000 elementos)
+Escolha (1/2/3): 3
+Tamanho lido: 10000
+Tempo de ordenacao com 2 threads classificadoras: 0.0019714 segundos
+
+Tempo de ordenacao com 10 threads classificadoras: 0.0018469 segundos
+
+Tempo de ordenacao com 50 threads classificadoras: 0.0123725 segundos
+```
+
+Nesse momento é possível notar uma melhora no algorítmo de 10 threads em relação ao de 2, justamente pelo aumento considerável de dados a serem ordenados. O algorítmo de 50 threads continua tendo um péssimo desempenho, pela mesma causa das anteriores, overhead. Talvez com uma quantidade de dados muitas vezes maior e um computador com um bom número de núcleos essa opção obtenha um desempenho consideravelmente melhor em relação aos outros dois.
 
 ---
 
@@ -60,10 +119,10 @@ sudo apt-get install g++
 Depois de instalado, compile o código:
 
 ```bash
-g++ main.cpp ler_arquivo.cpp classificar_2_threads.cpp classificar_10_threads.cpp classificar_10_5_intermediarias.cpp -std=c++11 -pthread -o programa
+g++ main.cpp ler_arquivo.cpp classificar_2_threads.cpp classificar_10_threads.cpp classificar_50_threads.cpp -std=c++11 -pthread -o programa
 ```
 
-E agora só rodar:
+E agora é só rodar:
 
 ```bash
 ./programa
