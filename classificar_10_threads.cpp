@@ -15,7 +15,7 @@ void classificar_10_threads(std::vector<int>& vetor, int tamanho) {
         int fim = (i + 1) * tamanho_parte;
         if (i == partes - 1) fim = tamanho;  // Garantir que a última parte cubra o restante
 
-        threads.push_back(std::thread(classificar_parte, std::ref(vetor), inicio, fim));
+        threads.emplace_back(std::thread(classificar_parte, std::ref(vetor), inicio, fim));
     }
 
     // Espera as threads de classificação
