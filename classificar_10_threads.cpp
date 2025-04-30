@@ -9,7 +9,6 @@ void classificar_10_threads(std::vector<int>& vetor, int tamanho) {
 
     std::vector<std::thread> threads;
 
-    // Threads classificadoras
     for (int i = 0; i < partes; ++i) {
         int inicio = i * tamanho_parte;
         int fim = (i + 1) * tamanho_parte;

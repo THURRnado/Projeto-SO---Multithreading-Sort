@@ -9,7 +9,6 @@ void classificar_50_threads(std::vector<int>& vetor, int tamanho) {
 
     std::vector<std::thread> threads;
 
-    // Classificação paralela (50 threads)
     for (int i = 0; i < partes; ++i) {
         int inicio = i * tamanho_parte;
         int fim = (i + 1) * tamanho_parte;
@@ -22,7 +21,6 @@ void classificar_50_threads(std::vector<int>& vetor, int tamanho) {
         t.join();
     }
 
-    // Mesclagens sucessivas em etapas
     int atual_partes = partes;
     int passo = tamanho_parte;
 
